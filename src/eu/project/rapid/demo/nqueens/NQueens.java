@@ -13,16 +13,15 @@
  * if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301 USA
  *******************************************************************************/
-package eu.project.rapid.demoapp;
-
-import java.lang.reflect.Method;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+package eu.project.rapid.demo.nqueens;
 
 import eu.project.rapid.ac.DFE;
 import eu.project.rapid.ac.Remoteable;
 import eu.project.rapid.utils.Utils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.lang.reflect.Method;
 
 public class NQueens extends Remoteable {
 

@@ -1,9 +1,9 @@
-package eu.project.rapid.demoapp;
-
-import java.lang.reflect.Method;
+package eu.project.rapid.demo.other;
 
 import eu.project.rapid.ac.DFE;
 import eu.project.rapid.ac.Remoteable;
+
+import java.lang.reflect.Method;
 
 public class TestSumNum extends Remoteable {
   private static final long serialVersionUID = 6467207260141507275L;

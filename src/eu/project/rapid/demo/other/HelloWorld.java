@@ -1,4 +1,4 @@
-package eu.project.rapid.demoapp;
+package eu.project.rapid.demo.other;
 
 import eu.project.rapid.ac.DFE;
 import eu.project.rapid.ac.Remoteable;
