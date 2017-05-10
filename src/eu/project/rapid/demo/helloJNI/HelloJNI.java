@@ -50,8 +50,6 @@ public class HelloJNI extends Remoteable {
     }
 
     public int rapidprintJava() {
-        System.out.println("---------------------- Running the rapidPrintJava method 3");
-        System.out.println("---------------------- Running the rapidPrintJava method 4");
         return print();
     }
 

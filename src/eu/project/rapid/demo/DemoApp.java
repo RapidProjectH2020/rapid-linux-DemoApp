@@ -13,6 +13,29 @@ public class DemoApp {
 
     private final static Logger log = LogManager.getLogger(DemoApp.class.getSimpleName());
 
+    ExecLocation[] execLocations = {ExecLocation.LOCAL, ExecLocation.REMOTE};
+
+    // Variables for statistics
+    private int[] nrQueens = {4, 5, 6, 7, 8};
+    private int[] nrTestsQueens = {5, 5, 5, 5, 5};
+    //    private int[] nrTestsQueens = {1,1,1,1,1};
+    private double[] nQueensLocalDur = new double[nrQueens.length];
+    private int[] nQueensLocalNr = new int[nrQueens.length];
+    private double[] nQueensRemoteDur = new double[nrQueens.length];
+    private int[] nQueensRemoteNr = new int[nrQueens.length];
+
+    private int nrJniTests = 5;
+    private double jniLocalDur;
+    private int jniLocalNr;
+    private double jniRemoteDur;
+    private int jniRemoteNr;
+
+    private int nrCudaTests = 5;
+    private double cudaLocalDur;
+    private int cudaLocalNr;
+    private double cudaRemoteDur;
+    private int cudaRemoteNr;
+
     public DemoApp(String vmIP) {
 
         if (vmIP != null) {
@@ -24,7 +47,6 @@ public class DemoApp {
         }
 
         dfe.setUserChoice(ExecLocation.REMOTE);
-//        dfe.setUserChoice(ExecLocation.LOCAL);
 
         System.out.println();
         System.out.println();
@@ -33,52 +55,112 @@ public class DemoApp {
 
         System.out.println();
         System.out.println();
-//        log.info("Testing NQueens...");
-//        testNQueens();
+        log.info("Testing NQueens...");
+        testNQueens();
 
         /*
         System.out.println();
         System.out.println();
         log.info("Testing CUDA offloading...");
-        testGvirtus();
+        testCUDA();
         */
 
         dfe.destroy();
-    }
 
-    private void testHelloJni() {
-        int nrTests = 3;
-        HelloJNI helloJni = new HelloJNI(dfe);
-        for (int i = 0; i < nrTests; i++) {
-            int result = helloJni.printJava();
-            log.info("The result of the native call with DFE: " + result);
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println("---------------- Cumulative statistics of the demo testing applications ----------------");
+
+        // nQueens
+        for (int i = 0; i < nrQueens.length; i++) {
+            System.out.println();
+            log.debug(nrQueens[i] + "-Queens");
+            System.out.printf("%12s %15s%n", "Nr.", "Avg. dur. (ms)");
+            System.out.printf("%-8s %3d %15.2f%n", "Local", nQueensLocalNr[i], nQueensLocalDur[i] / nQueensLocalNr[i] / 1000000);
+            System.out.printf("%-8s %3d %15.2f%n", "Remote", nQueensRemoteNr[i], nQueensRemoteDur[i] / nQueensRemoteNr[i] / 1000000);
         }
+
+        System.out.println();
+        log.debug("jni hello");
+        System.out.printf("%12s %15s%n", "Nr.", "Avg. dur. (ms)");
+        System.out.printf("%-8s %3d %15.2f%n", "Local", jniLocalNr, jniLocalDur / jniLocalNr / 1000000);
+        System.out.printf("%-8s %3d %15.2f%n", "Remote", jniRemoteNr, jniRemoteDur / jniRemoteNr / 1000000);
+
+        System.out.println();
+        log.debug("CUDA MatrixMul");
+        System.out.printf("%12s %15s%n", "Nr.", "Avg. dur. (ms)");
+        System.out.printf("%-8s %3d %15.2f%n", "Local", cudaLocalNr, cudaLocalDur / cudaLocalNr / 1000000);
+        System.out.printf("%-8s %3d %15.2f%n", "Remote", cudaRemoteNr, cudaRemoteDur / cudaRemoteNr / 1000000);
+
     }
 
     private void testNQueens() {
         NQueens q = new NQueens(dfe);
-        int result = -1;
-        int[] nrQueens = {4, 5, 6, 7, 8};
-        int[] nrTests = {1, 1, 1, 1, 1};
 
-        for (int i = 0; i < nrQueens.length; i++) {
-            for (int j = 0; j < nrTests[i]; j++) {
-                result = q.solveNQueens(nrQueens[i]);
+        for (ExecLocation execLocation : execLocations) {
+            dfe.setUserChoice(execLocation);
+            for (int i = 0; i < nrQueens.length; i++) {
+                for (int j = 0; j < nrTestsQueens[i]; j++) {
+                    int result = q.solveNQueens(nrQueens[i]);
+                    log.info("Result of NQueens(" + nrQueens[i] + "): " + result);
+
+                    String methodName = "localSolveNQueens";
+                    if (dfe.getLastExecLocation(methodName).equals(ExecLocation.LOCAL)) {
+                        nQueensLocalNr[i]++;
+                        nQueensLocalDur[i] += dfe.getLastExecDuration(methodName);
+                    } else {
+                        nQueensRemoteNr[i]++;
+                        nQueensRemoteDur[i] += dfe.getLastExecDuration(methodName);
+                    }
+                }
             }
-            log.info("Result of NQueens(" + nrQueens[i] + "): " + result);
         }
     }
 
-    private void testGvirtus() {
-        int nrTests = 1;
+    private void testHelloJni() {
+        HelloJNI helloJni = new HelloJNI(dfe);
+
+        for (ExecLocation execLocation : execLocations) {
+            dfe.setUserChoice(execLocation);
+            for (int i = 0; i < nrJniTests; i++) {
+                int result = helloJni.printJava();
+                log.info("The result of the native call with DFE: " + result);
+
+                String methodName = "rapidprintJava";
+                if (dfe.getLastExecLocation(methodName).equals(ExecLocation.LOCAL)) {
+                    jniLocalNr++;
+                    jniLocalDur += dfe.getLastExecDuration(methodName);
+                } else {
+                    jniRemoteNr++;
+                    jniRemoteDur += dfe.getLastExecDuration(methodName);
+                }
+            }
+        }
+    }
+
+    private void testCUDA() {
         MatrixMul matrixMul = new MatrixMul(dfe);
         int wa = 8;
         int wb = 12;
 
-        for (int i = 0; i < nrTests; i++) {
-            log.info("------------ Started running GVirtuS with DFE.");
-            matrixMul.gpuMatrixMul(wa, wb, wa);
-            log.info("Finished executing GVirtuS matrixMul with DFE.");
+        for (ExecLocation execLocation : execLocations) {
+            dfe.setUserChoice(execLocation);
+            for (int i = 0; i < nrCudaTests; i++) {
+                log.info("------------ Started running CUDA MatrixMul with DFE.");
+                matrixMul.gpuMatrixMul(wa, wb, wa);
+                log.info("Finished executing CUDA MatrixMul with DFE.");
+
+                String methodName = "localGpuMatrixMul";
+                if (dfe.getLastExecLocation(methodName).equals(ExecLocation.LOCAL)) {
+                    cudaLocalNr++;
+                    cudaLocalDur += dfe.getLastExecDuration(methodName);
+                } else {
+                    cudaRemoteNr++;
+                    cudaRemoteDur += dfe.getLastExecDuration(methodName);
+                }
+            }
         }
     }
 

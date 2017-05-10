@@ -27,7 +27,6 @@ public class MatrixMul extends Remoteable {
         this.dfe = dfe;
         String ptxName = "cuda-kernels/matrixMul_kernel64.ptx";
         try {
-//            ptxSource = Util.readAssetFileAsString(dfe.getContext(), ptxName);
             ptxSource = Util.readResourceFileAsString(this.getClass().getClassLoader(), ptxName);
         } catch (IOException ex) {
             throw new RuntimeException(ex);
@@ -46,7 +45,7 @@ public class MatrixMul extends Remoteable {
 
     public void gpuMatrixMul(int widthA, int heightA, int widthB) {
 
-        Providers.getInstance().register("193.205.230.23",9991);
+        Providers.getInstance().register("193.205.230.23", 9991);
 
         this.widthA = widthA;
         this.heightA = heightA;
@@ -74,7 +73,7 @@ public class MatrixMul extends Remoteable {
     @Remote
     public void localGpuMatrixMul(int widthA, int heightA, int widthB) {
         final float valB = 0.01f;
-        CudaDrFrontend driver=new CudaDrFrontend();
+        CudaDrFrontend driver = new CudaDrFrontend();
         try {
             driver.cuInit(0);
             String cuContext = driver.cuCtxCreate(0, 0);
