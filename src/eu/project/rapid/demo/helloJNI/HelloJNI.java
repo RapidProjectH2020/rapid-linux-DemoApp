@@ -21,8 +21,7 @@ public class HelloJNI extends Remoteable {
                 System.err.println("Sokol: library not compiled for Windows.");
             }
         } catch (UnsatisfiedLinkError e) {
-            System.err.println("Could not load native library, maybe this is running on the clone.");
-            e.printStackTrace();
+            System.err.println("Could not load native library, maybe this is running on the VM.");
         }
     }
 
@@ -51,6 +50,8 @@ public class HelloJNI extends Remoteable {
     }
 
     public int rapidprintJava() {
+        System.out.println("---------------------- Running the rapidPrintJava method 3");
+        System.out.println("---------------------- Running the rapidPrintJava method 4");
         return print();
     }
 

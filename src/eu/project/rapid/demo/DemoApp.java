@@ -31,12 +31,12 @@ public class DemoApp {
         log.info("Testing JNI...");
         testHelloJni();
 
-        /*
         System.out.println();
         System.out.println();
-        log.info("Testing NQueens...");
-        testNQueens();
+//        log.info("Testing NQueens...");
+//        testNQueens();
 
+        /*
         System.out.println();
         System.out.println();
         log.info("Testing CUDA offloading...");
@@ -47,7 +47,7 @@ public class DemoApp {
     }
 
     private void testHelloJni() {
-        int nrTests = 1;
+        int nrTests = 3;
         HelloJNI helloJni = new HelloJNI(dfe);
         for (int i = 0; i < nrTests; i++) {
             int result = helloJni.printJava();
