@@ -13,12 +13,11 @@ public class DemoApp {
 
     private final static Logger log = LogManager.getLogger(DemoApp.class.getSimpleName());
 
-    ExecLocation[] execLocations = {ExecLocation.LOCAL, ExecLocation.REMOTE};
+    private ExecLocation[] execLocations = {ExecLocation.LOCAL, ExecLocation.REMOTE};
 
     // Variables for statistics
     private int[] nrQueens = {4, 5, 6, 7, 8};
     private int[] nrTestsQueens = {5, 5, 5, 5, 5};
-    //    private int[] nrTestsQueens = {1,1,1,1,1};
     private double[] nQueensLocalDur = new double[nrQueens.length];
     private int[] nQueensLocalNr = new int[nrQueens.length];
     private double[] nQueensRemoteDur = new double[nrQueens.length];
@@ -30,13 +29,13 @@ public class DemoApp {
     private double jniRemoteDur;
     private int jniRemoteNr;
 
-    private int nrCudaTests = 5;
+    private int nrCudaTests = 1;
     private double cudaLocalDur;
     private int cudaLocalNr;
     private double cudaRemoteDur;
     private int cudaRemoteNr;
 
-    public DemoApp(String vmIP) {
+    public DemoApp(String vmIP, String connType) {
 
         if (vmIP != null) {
             log.info("Registering with the given VM...");
@@ -47,23 +46,22 @@ public class DemoApp {
         }
 
         dfe.setUserChoice(ExecLocation.REMOTE);
+        dfe.setConnEncrypted(connType != null && connType.equals("ssl"));
 
         System.out.println();
         System.out.println();
-        log.info("Testing JNI...");
-        testHelloJni();
+//        log.info("Testing JNI...");
+//        testHelloJni();
 
         System.out.println();
         System.out.println();
-        log.info("Testing NQueens...");
-        testNQueens();
+//        log.info("Testing NQueens...");
+//        testNQueens();
 
-        /*
         System.out.println();
         System.out.println();
         log.info("Testing CUDA offloading...");
         testCUDA();
-        */
 
         dfe.destroy();
 
@@ -174,18 +172,25 @@ public class DemoApp {
 
     public static void main(String[] argv) {
         String vmIP = "192.168.0.104";
+        String connType = "ssl";
 
         for (int i = 0; i < argv.length; i++) {
-            if (argv[i].equals("-vm")) {
-                vmIP = argv[i + 1];
-            }
-            if (argv[i].equals("-rapid")) {
-                vmIP = null;
-                break;
+            switch (argv[i]) {
+                case "-vm":
+                    vmIP = argv[i + 1];
+                    break;
+
+                case "-rapid":
+                    vmIP = null;
+                    break;
+
+                case "-conn":
+                    connType = argv[i + 1];
+                    break;
             }
         }
 
         log.info("Creating connection with VM: " + vmIP);
-        new DemoApp(vmIP);
+        new DemoApp(vmIP, connType);
     }
 }

@@ -5,7 +5,7 @@
 	<artifactId>rapid-demo-linux</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>DemoApp</name>
-	<description>This is a demo of the linux version of the rapid project</description>
+	<description>This is a demo of the linux version of the RAPID project</description>
 	<build>
 		<sourceDirectory>src</sourceDirectory>
 		<resources>

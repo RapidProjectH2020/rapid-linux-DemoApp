@@ -24,6 +24,7 @@ public class MatrixMul extends Remoteable {
     private String ptxSource;
 
     public MatrixMul(DFE dfe) {
+
         this.dfe = dfe;
         String ptxName = "cuda-kernels/matrixMul_kernel64.ptx";
         try {
@@ -75,9 +76,13 @@ public class MatrixMul extends Remoteable {
         final float valB = 0.01f;
         CudaDrFrontend driver = new CudaDrFrontend();
         try {
+            System.out.println("1");
+
             driver.cuInit(0);
             String cuContext = driver.cuCtxCreate(0, 0);
             driver.cuDeviceGet(0);
+
+            System.out.println("2");
 
             int jitNumOptions = 3;
             int[] jitOptions = new int[jitNumOptions];
@@ -86,6 +91,8 @@ public class MatrixMul extends Remoteable {
             jitOptions[0] = 4;// CU_JIT_INFO_LOG_BUFFER_SIZE_BYTES;
             long jitLogBufferSize = 1024;
             long jitOptVals0 = jitLogBufferSize;
+
+            System.out.println("3");
 
             // set up pointer to the compilation log buffer
             jitOptions[1] = 3;// CU_JIT_INFO_LOG_BUFFER;
@@ -99,10 +106,16 @@ public class MatrixMul extends Remoteable {
             long jitRegCount = 32;
             long jitOptVals2 = jitRegCount;
 
+            System.out.println("4");
+
             String cmodule = driver.cuModuleLoadDataEx(ptxSource, jitNumOptions, jitOptions, jitOptVals0,
                     jitOptVals1, jitOptVals2);
 
+            System.out.println("4.1");
+
             String cfunction = driver.cuModuleGetFunction(cmodule, "matrixMul_bs32_32bit");
+
+            System.out.println("4.2");
 
             // allocate host memory for matrices A and B
             int block_size = 32; // larger block size is for Fermi and above
@@ -112,6 +125,8 @@ public class MatrixMul extends Remoteable {
             final int HB = WA; // Matrix B height
             int WC = WB; // Matrix C width
             int HC = HA; // Matrix C height
+
+            System.out.println("5");
 
             int size_A = WA * HA;
             int mem_size_A = Float.SIZE / 8 * size_A;
@@ -137,6 +152,7 @@ public class MatrixMul extends Remoteable {
             long mem_size_C = Float.SIZE / 8 * size_C;
             String d_C;
 
+            System.out.println("6");
 
             d_C = driver.cuMemAlloc(mem_size_C);
             Util.Dim3 grid = new Util.Dim3(WC / block_size, HC / block_size, 1);
@@ -194,6 +210,8 @@ public class MatrixMul extends Remoteable {
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
+
+        System.out.println("7");
     }
 
     public static float[][] makeMatrix(int dim1, int dim2, float valB) {
