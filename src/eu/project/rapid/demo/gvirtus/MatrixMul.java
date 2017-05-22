@@ -30,7 +30,7 @@ public class MatrixMul extends Remoteable {
         this.dfe = dfe;
         String ptxName = "Resources/cuda-kernels/matrixMul_kernel64.ptx";
         try {
-            String text = new Scanner(MatrixMul.class.getClass().getResourceAsStream(ptxName), "UTF-8").useDelimiter("\\A").next();
+            ptxSource = new Scanner(MatrixMul.class.getClass().getResourceAsStream(ptxName), "UTF-8").useDelimiter("\\A").next();
         } catch (Exception e){
             e.printStackTrace();
         }

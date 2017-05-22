@@ -91,6 +91,12 @@
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
+
+		<dependency>
+			<groupId>eu.project.rapid</groupId>
+			<artifactId>rapid-common</artifactId>
+			<version>0.0.1</version>
+		</dependency>
 		<!--
 		 <dependency>
 			<groupId>eu.project.rapid</groupId>
