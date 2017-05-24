@@ -16,6 +16,7 @@
 package eu.project.rapid.demo.nqueens;
 
 import eu.project.rapid.ac.DFE;
+import eu.project.rapid.ac.Remote;
 import eu.project.rapid.ac.Remoteable;
 import eu.project.rapid.utils.Utils;
 import org.apache.logging.log4j.LogManager;
@@ -83,6 +84,7 @@ public class NQueens extends Remoteable {
     }
 
     @SuppressWarnings("unused")
+    @Remote
     private int localSolveNQueens(int N) {
 
         System.out.println("------------- Solving NQueens...");

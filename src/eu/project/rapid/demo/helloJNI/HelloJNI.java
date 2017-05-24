@@ -1,6 +1,7 @@
 package eu.project.rapid.demo.helloJNI;
 
 import eu.project.rapid.ac.DFE;
+import eu.project.rapid.ac.Remote;
 import eu.project.rapid.ac.Remoteable;
 import eu.project.rapid.utils.Utils;
 
@@ -39,7 +40,7 @@ public class HelloJNI extends Remoteable {
         Class<?>[] parameterTypes = {};
         Method method;
         try {
-            method = this.getClass().getMethod("rapidprintJava", parameterTypes);
+            method = this.getClass().getMethod("localprintJava", parameterTypes);
             result = (int) dfe.execute(method, this);
         } catch (NoSuchMethodException | SecurityException e) {
             // TODO Auto-generated catch block
@@ -49,7 +50,8 @@ public class HelloJNI extends Remoteable {
         return result;
     }
 
-    public int rapidprintJava() {
+    @Remote
+    public int localprintJava() {
         return print();
     }
 
