@@ -8,6 +8,8 @@ import eu.project.rapid.demo.nqueens.NQueens;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
+
 public class DemoApp {
     private DFE dfe;
 
@@ -139,7 +141,12 @@ public class DemoApp {
     }
 
     private void testCUDA() {
-        MatrixMul matrixMul = new MatrixMul(dfe);
+        MatrixMul matrixMul = null;
+        try {
+            matrixMul = new MatrixMul(dfe);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         int wa = 8;
         int wb = 12;
 
@@ -192,5 +199,6 @@ public class DemoApp {
 
         log.info("Creating connection with VM: " + vmIP);
         new DemoApp(vmIP, connType);
+        System.exit(0);
     }
 }
