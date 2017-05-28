@@ -79,6 +79,7 @@ The demo application shows three representative use case offloading scenarios:
 ### Installing
 The demo shows how portion of the application's code can be run locally on the device or can be offloaded on a remote VM.
 Installation steps:
+
 0. Dependencies: This project is developed in [IntelliJ IDEA](https://www.jetbrains.com/idea/) with [Maven](https://maven.apache.org/).
 1. Clone this project in IntelliJ IDEA.
    * The project has library dependencies that are distributed via [Bintray](https://bintray.com/rapidprojecth2020/rapid).
@@ -86,7 +87,6 @@ Installation steps:
    <?xml version="1.0" encoding="UTF-8" ?>
 <settings xsi:schemaLocation='http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd'
           xmlns='http://maven.apache.org/SETTINGS/1.0.0' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>
-    
     <profiles>
         <profile>
             <repositories>
