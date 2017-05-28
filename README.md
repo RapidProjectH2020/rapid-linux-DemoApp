@@ -83,66 +83,81 @@ Installation steps:
 0. Dependencies: This project is developed in [IntelliJ IDEA](https://www.jetbrains.com/idea/) with [Maven](https://maven.apache.org/).
 1. Clone this project in IntelliJ IDEA.
    * The project has library dependencies that are distributed via [Bintray](https://bintray.com/rapidprojecth2020/rapid).
+   You need to add the support for Bintray in the Maven `~/.m2/settings.xml` [settings file](https://maven.apache.org/settings.html).
+   The code below is an example of the settings you need to add for including the libraries needed by this project.
    ```xml
    <?xml version="1.0" encoding="UTF-8" ?>
-<settings xsi:schemaLocation='http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd'
-          xmlns='http://maven.apache.org/SETTINGS/1.0.0' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>
-    <profiles>
-        <profile>
-            <repositories>
-                <repository>
-                    <snapshots>
-                        <enabled>false</enabled>
-                    </snapshots>
-                    <id>bintray-rapidprojecth2020-rapid</id>
-                    <name>bintray</name>
-                    <url>http://dl.bintray.com/rapidprojecth2020/rapid</url>
-                </repository>
-            </repositories>
-            <pluginRepositories>
-                <pluginRepository>
-                    <snapshots>
-                        <enabled>false</enabled>
-                    </snapshots>
-                    <id>bintray-rapidprojecth2020-rapid</id>
-                    <name>bintray-plugins</name>
-                    <url>http://dl.bintray.com/rapidprojecth2020/rapid</url>
-                </pluginRepository>
-            </pluginRepositories>
-            <id>bintray</id>
-        </profile>
-    </profiles>
-    <activeProfiles>
-        <activeProfile>bintray</activeProfile>
-    </activeProfiles>
-</settings>
+    <settings xsi:schemaLocation='http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd'
+              xmlns='http://maven.apache.org/SETTINGS/1.0.0' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>
+        <profiles>
+            <profile>
+                <repositories>
+                    <repository>
+                        <snapshots>
+                            <enabled>false</enabled>
+                        </snapshots>
+                        <id>bintray-rapidprojecth2020-rapid</id>
+                        <name>bintray</name>
+                        <url>http://dl.bintray.com/rapidprojecth2020/rapid</url>
+                    </repository>
+                </repositories>
+                <pluginRepositories>
+                    <pluginRepository>
+                        <snapshots>
+                            <enabled>false</enabled>
+                        </snapshots>
+                        <id>bintray-rapidprojecth2020-rapid</id>
+                        <name>bintray-plugins</name>
+                        <url>http://dl.bintray.com/rapidprojecth2020/rapid</url>
+                    </pluginRepository>
+                </pluginRepositories>
+                <id>bintray</id>
+            </profile>
+        </profiles>
+        <activeProfiles>
+            <activeProfile>bintray</activeProfile>
+        </activeProfiles>
+    </settings>
    ```
 2. Use `mvn install` to build the application and create the executable jar file.
+   * The executable jar file will be created in `<project_location>/target/rapid-demo-linux-0.0.1-SNAPSHOT.jar`, 
+   where `<project_location>` is the folder where you downloaded this project.
 3. Download the AS executable jar file from the RAPID website [here](http://rapid-project.eu/files/rapid-linux-as.jar).
-   * Run the AS jar on a Linux VM or on a Linux machine.
+   * Run the AS jar on a Linux VM or on a physical Linux machine:
+   ```bash
+   java -Djava.library.path=~/rapid-server/libs/ -jar rapid-linux-as.jar
+   ```
+    
+   * `-Djava.library.path` is needed to instruct the Java Virtual Machine (JVM) where to find the shared native libraries
+    shipped with the application.
+    The folder will be created automatically by the RAPID AS and the native libraries integrated in the Jar files
+    of the offloadable applications will be copied here during the registration phase of the applications.
    * The jar will automatically start listening for client applications.
    * Get the IP of the machine where the AS is running.
    * Make sure that the low-power client device can ping the machine where the AS is running.
    * ***Notice:** In the final release of the RAPID architecture we will provide VMs with AS running on the RAPID cloud,
    meaning that you will not have to deal with these steps yourself.*
-4. On the phone, select the radio button `Direct connection to VM` and write the **IP of the VM** on the text box that will open
-(see the first figure below).
-6. Press `Start` and wait until the app connects with the AS running on the VM.
-   * A **green text** will notify that the connection with the VM was **successful**.
-   * A **red text** will notify that the connection with the VM was **not successful**.
-7. You will be presented with an Android activity showing the three demo apps.
-8. You can select the execution location of the tasks using the radio buttons:
-   * `Always Local` will instruct the framework to always execute the tasks locally on the device (phone).
-   * `Always Remote` will instruct the framework to always execute the tasks remotely on the VM.
-   * `Energy and Delay` will instruct the framework to make dynamic decisions and choose the execution location (local or remote) so that to minimize the energy and execution time of each task.
-9. The second figure below shows the N-Queens puzzle being executed locally on the device.
-10. The third figure shows the statistics after running the N-Queens puzzle once in the device and once remotely on the VM.
-    * You can see that running it remotely is almost 10 times faster.
+4. Run the demo application on the client device:
+   ```bash
+   java -Djava.library.path=<project_location>/Resources/libs \
+   -jar <project_location>/target/rapid-demo-linux-0.0.1-SNAPSHOT.jar \
+   -vm <as_ip> [-conn [clear|ssl]]
+   ```
+   
+   * `<project_location>` indicates the location where the user downloaded the demo project in her machine.
+   * `-Djava.library.path` is needed to instruct the JVM where to find the shared native libraries shipped with the application.
+   Since in this demo we also implement and show the native code offloading capabilities of RAPID, 
+   we have integrated a simple shared library in the demo application (see below).
+   As such, we should indicate where the native library can be found, which in this case is the path in `<project_location>/Resources/libs`.
+   * `-vm <as_ip>` indicates the IP of the machine where the AS is running.
+   The AS should have been already launched and running in a machine that can be accessed from the client device.
+   * The last command line argument, `[-conn [clear|ssl]]`, 
+   can be used to set the desired communication to be performed in clear or encrypted with SSL.
+   This argument can be omitted and by default the communication will be performed via SSL.
+6. When running the demo application, several log messages will be printed, detailing the execution process and facilitating the understanding of the whole system. The final messages printed, shown in Figure 23, are the cumulative statistics for each application.
 
 <p align="center">
-<img src="http://rapid-project.eu/files/rapid-android-demo2.png" width="160">
-<img src="http://rapid-project.eu/files/rapid-android-demo3.png" width="160">
-<img src="http://rapid-project.eu/files/rapid-android-demo4.png" width="160">
+<img src="http://rapid-project.eu/files/rapid-linux-demo1.png" width="640">
 </p>
 
 ## Developing Java Applications with RAPID Offloading Support
