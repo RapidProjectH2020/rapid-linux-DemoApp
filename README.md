@@ -152,7 +152,7 @@ Installation steps:
    * The last command line argument, `[-conn [clear|ssl]]`, 
    can be used to set the desired communication to be performed in clear or encrypted with SSL.
    This argument can be omitted and by default the communication will be performed via SSL.
-6. When running the demo application, several log messages will be printed, detailing the execution process and facilitating the understanding of the whole system. The final messages printed, shown in Figure 23, are the cumulative statistics for each application.
+6. When running the demo application, several log messages will be printed, detailing the execution process and facilitating the understanding of the whole system. The final messages printed, shown in the figure below, are the cumulative statistics for each application.
 
 <p align="center">
 <img src="http://rapid-project.eu/files/rapid-linux-demo1.png" width="640">
