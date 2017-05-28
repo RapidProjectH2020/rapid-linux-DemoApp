@@ -1,4 +1,4 @@
-# RAPID - Android Demo Application
+# RAPID - Java Demo Application
 This is part of the [RAPID Project](http://www.rapid-project.eu) and is an ongoing work.
 While RAPID envisions to support heterogeneous devices, this is the demonstration of the tasks offloading on **generic Java applications**.
 This demo uses the [RAPID Linux/Windows Offloading Framework](https://github.com/RapidProjectH2020/rapid-linux).  
