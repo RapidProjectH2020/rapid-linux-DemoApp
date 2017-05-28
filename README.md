@@ -124,10 +124,9 @@ Installation steps:
    where `<project_location>` is the folder where you downloaded this project.
 3. Download the AS executable jar file from the RAPID website [here](http://rapid-project.eu/files/rapid-linux-as.jar).
    * Run the AS jar on a Linux VM or on a physical Linux machine:
-   ```bash
-   java -Djava.library.path=~/rapid-server/libs/ -jar rapid-linux-as.jar
-   ```
-    
+     ```bash
+     java -Djava.library.path=~/rapid-server/libs/ -jar rapid-linux-as.jar
+     ```
    * `-Djava.library.path` is needed to instruct the Java Virtual Machine (JVM) where to find the shared native libraries
     shipped with the application.
     The folder will be created automatically by the RAPID AS and the native libraries integrated in the Jar files
@@ -143,7 +142,6 @@ Installation steps:
    -jar <project_location>/target/rapid-demo-linux-0.0.1-SNAPSHOT.jar \
    -vm <as_ip> [-conn [clear|ssl]]
    ```
-   
    * `<project_location>` indicates the location where the user downloaded the demo project in her machine.
    * `-Djava.library.path` is needed to instruct the JVM where to find the shared native libraries shipped with the application.
    Since in this demo we also implement and show the native code offloading capabilities of RAPID, 
