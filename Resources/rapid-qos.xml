@@ -1,0 +1,20 @@
+<application>
+    <name>TODO</name>
+    <class>
+        <name>/Users/sokol/Desktop/test/demo/JniTest.java</name>
+        <method>
+            <name>localjniCaller</name>
+            <Remote>
+                <computeIntensive>true</computeIntensive>
+            </Remote>
+            <QoS>
+                <term>cpu_util</term>
+                <operator>LT</operator>
+                <threshold>220</threshold>
+                <term>mem_util</term>
+                <operator>LT</operator>
+                <threshold>60</threshold>
+            </QoS>
+        </method>
+    </class>
+</application>
