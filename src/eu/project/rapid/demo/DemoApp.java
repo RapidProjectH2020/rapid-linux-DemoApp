@@ -57,13 +57,13 @@ public class DemoApp {
 
         System.out.println();
         System.out.println();
-//        log.info("Testing NQueens...");
-//        testNQueens();
+        log.info("Testing NQueens...");
+        testNQueens();
 
         System.out.println();
         System.out.println();
-        log.info("Testing CUDA offloading...");
-        testCUDA();
+//        log.info("Testing CUDA offloading...");
+//        testCUDA();
 
         dfe.destroy();
 
