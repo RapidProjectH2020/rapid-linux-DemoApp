@@ -19,7 +19,8 @@ public class DemoApp {
 
     // Variables for statistics
     private int[] nrQueens = {4, 5, 6, 7, 8};
-    private int[] nrTestsQueens = {5, 5, 5, 5, 5};
+    // private int[] nrTestsQueens = {5, 5, 5, 5, 5};
+    private int[] nrTestsQueens = {0, 0, 0, 0, 0};
     private double[] nQueensLocalDur = new double[nrQueens.length];
     private int[] nQueensLocalNr = new int[nrQueens.length];
     private double[] nQueensRemoteDur = new double[nrQueens.length];
@@ -31,7 +32,7 @@ public class DemoApp {
     private double jniRemoteDur;
     private int jniRemoteNr;
 
-    private int nrCudaTests = 1;
+    private int nrCudaTests = 0;
     private double cudaLocalDur;
     private int cudaLocalNr;
     private double cudaRemoteDur;
@@ -52,8 +53,8 @@ public class DemoApp {
 
         System.out.println();
         System.out.println();
-//        log.info("Testing JNI...");
-//        testHelloJni();
+        log.info("Testing JNI...");
+        testHelloJni();
 
         System.out.println();
         System.out.println();
@@ -62,8 +63,8 @@ public class DemoApp {
 
         System.out.println();
         System.out.println();
-//        log.info("Testing CUDA offloading...");
-//        testCUDA();
+        log.info("Testing CUDA offloading...");
+        testCUDA();
 
         dfe.destroy();
 
@@ -128,7 +129,7 @@ public class DemoApp {
                 int result = helloJni.printJava();
                 log.info("The result of the native call with DFE: " + result);
 
-                String methodName = "rapidprintJava";
+                String methodName = "localprintJava";
                 if (dfe.getLastExecLocation(methodName).equals(ExecLocation.LOCAL)) {
                     jniLocalNr++;
                     jniLocalDur += dfe.getLastExecDuration(methodName);
